@@ -40,6 +40,7 @@ INSTALLED_APPS = ["whitenoise.runserver_nostatic"] + INSTALLED_APPS  # noqa: F40
 INSTALLED_APPS += ["debug_toolbar"]  # noqa: F405
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#middleware
 MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]  # noqa: F405
+MIDDLEWARE.insert(1, "config.cors_middleware.CustomCorsMiddleware")  # Custom CORS middleware
 # https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html#debug-toolbar-config
 DEBUG_TOOLBAR_CONFIG = {
     "DISABLE_PANELS": ["debug_toolbar.panels.redirects.RedirectsPanel"],
@@ -67,6 +68,67 @@ CELERY_TASK_EAGER_PROPAGATES = True
 ADMIN_SITE_HEADER = "{} Admin (Development)".format("hirethon_template".title())
 ADMIN_SITE_TITLE = "{} Admin Portal (Development)".format("hirethon_template".title())
 ADMIN_INDEX_TITLE = "Welcome to {} Admin Portal (Development)".format("hirethon_template".title())
+
+# CORS settings for development
+# ------------------------------------------------------------------------------
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # React default port
+    "http://localhost:3001",  # Alternative React port
+    "http://localhost:5173",  # Vite default port
+    "http://localhost:8080",  # Vue.js default port
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:3001",
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:8080",
+]
+
+# Allow all origins in development (less secure but convenient)
+CORS_ALLOW_ALL_ORIGINS = True
+
+# Allow credentials for authentication
+CORS_ALLOW_CREDENTIALS = True
+
+# Additional CORS settings for development
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+]
+
+# Additional CORS settings to ensure headers are added
+CORS_EXPOSE_HEADERS = [
+    "access-control-allow-origin",
+    "access-control-allow-credentials",
+]
+
+# Preflight cache time
+CORS_PREFLIGHT_MAX_AGE = 86400
+
+# REST Auth settings for development
+REST_AUTH = {
+    "USE_JWT": True,
+    "JWT_AUTH_COOKIE": "access_token",
+    "JWT_AUTH_REFRESH_COOKIE": "refresh_token",
+    "JWT_AUTH_HTTPONLY": True,  # Access token in httpOnly cookie (secure)
+    "JWT_AUTH_SAMESITE": "Lax",
+    "SESSION_LOGIN": False,
+    "JWT_AUTH_SECURE": False,  # Set to True in production with HTTPS
+}
 
 # Your stuff...
 # ------------------------------------------------------------------------------

@@ -8,6 +8,9 @@ from django.views.generic import TemplateView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.authtoken.views import obtain_auth_token
 
+from hirethon_template.users.api.views import CustomLoginView
+from hirethon_template.users.custom_registration_view import CustomRegistrationView
+
 # Customize admin site
 admin.site.site_header = settings.ADMIN_SITE_HEADER
 admin.site.site_title = settings.ADMIN_SITE_TITLE
@@ -41,6 +44,9 @@ urlpatterns += [
     ),
     path('rest-auth/', include('dj_rest_auth.urls')),
     path('rest-auth/registration/', include('dj_rest_auth.registration.urls')),
+    # Custom auth endpoints with user details
+    path('api/auth/login/', CustomLoginView.as_view(), name='custom-login'),
+    path('api/auth/register/', CustomRegistrationView.as_view(), name='custom-register'),
 ]
 
 if settings.DEBUG:

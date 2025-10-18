@@ -322,10 +322,11 @@ SOCIALACCOUNT_FORMS = {"signup": "hirethon_template.users.forms.UserSocialSignup
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.SessionAuthentication",
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "config.authentication.CustomJWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "EXCEPTION_HANDLER": "config.authentication.custom_authentication_handler",
 }
 
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
@@ -343,9 +344,11 @@ REST_AUTH = {
     "USE_JWT": True,
     "JWT_AUTH_COOKIE": "access_token",
     "JWT_AUTH_REFRESH_COOKIE": "refresh_token",
-    "JWT_AUTH_HTTPONLY": False,
+    "JWT_AUTH_HTTPONLY": True,  # Access token in httpOnly cookie (secure)
     "JWT_AUTH_SAMESITE": "Lax",
     "SESSION_LOGIN": False,
+    "USER_DETAILS_SERIALIZER": "hirethon_template.users.api.serializers.UserSerializer",
+    "REGISTER_SERIALIZER": "hirethon_template.users.registration_serializer.CustomRegisterSerializer",
 }
 
 # Customize admin site
