@@ -21,6 +21,8 @@ urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     # User management
     path("users/", include("hirethon_template.users.urls", namespace="users")),
+    # Organization management
+    path("organizations/", include("hirethon_template.organization.urls", namespace="organization")),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
